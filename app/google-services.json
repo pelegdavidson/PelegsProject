@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "244076499752",
+    "firebase_url": "https://pelegsproject.firebaseio.com",
+    "project_id": "pelegsproject",
+    "storage_bucket": "pelegsproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244076499752:android:5e2d219e9bdba557",
+        "android_client_info": {
+          "package_name": "com.example.peleg.pelegsproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244076499752-7nd77c6b5bgahmiqee8usioccqauhf76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peleg.pelegsproject",
+            "certificate_hash": "2ad42fc61f68e6356cf23205ddd24b9b9a67861d"
+          }
+        },
+        {
+          "client_id": "244076499752-732lt42a1olre9b900sta7huhaso48u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDznEx4tQQftbvT1QTU_EyBuK1n_Lxw1y4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244076499752-732lt42a1olre9b900sta7huhaso48u3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
