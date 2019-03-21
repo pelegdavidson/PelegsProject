@@ -2,66 +2,160 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_home"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/message"
-        android:layout_marginTop="30dp"
-        android:id="@+id/btn_start"
-        android:text="start"/>
-
-    <TextView
-
-        android:id="@+id/tv_latitude"
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_start"
-        android:layout_marginTop="30dp" />
-
-    <TextView
-
-        android:id="@+id/tv_longitude"
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_latitude"
-        android:layout_marginTop="30dp" />
+    tools:context=".MainActivity"
+    android:background="@mipmap/background">
 
 
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_home"
+             />
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:layout_below="@+id/message"/>
+
+        <LinearLayout
+            android:weightSum="4"
+            android:id="@+id/ll3"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:padding="15dp"
+                android:layout_weight="3"
+                android:background="@drawable/shapeemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_date" />
+
+            <Button
+                android:layout_weight="1"
+                android:background="@drawable/shapesignup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELECT DATE"
+                android:id="@+id/btn_date"
+                android:onClick="onClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:weightSum="4"
+            android:id="@+id/ll4"
+            android:layout_below="@+id/ll3"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="15dp"
+                android:layout_weight="3"
+                android:background="@drawable/shapeemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_time" />
+
+            <Button
+                android:layout_weight="1"
+                android:background="@drawable/shapesignup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELECT TIME"
+                android:id="@+id/btn_time"
+                android:onClick="onClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:weightSum="4"
+            android:id="@+id/ll5"
+            android:layout_below="@+id/ll4"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:padding="15dp"
+                android:layout_weight="3"
+                android:background="@drawable/shapeemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_duration" />
+
+            <Button
+                android:layout_weight="1"
+                android:background="@drawable/shapesignup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SET DURATION"
+                android:id="@+id/btn_duration"
+                android:onClick="onClick"/>
+        </LinearLayout>
+
+        <CheckBox
+            android:layout_centerHorizontal="true"
+            android:id="@+id/cb1"
+            android:layout_below="@+id/ll5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:text="Return Every Week"/>
+        <LinearLayout
+            android:background="@drawable/shapeemail"
+            android:id="@+id/ll6"
+            android:layout_below="@+id/cb1"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="choose members:"
+                android:textSize="20dp"
+                android:textColor="#f000ff"
+                android:gravity="center" />
+
+            <ListView
+                android:id="@+id/members_lv"
+                android:padding="3dp"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:dividerHeight="3dp" />
+        </LinearLayout>
+
+        <Button
+            android:background="@drawable/shapelogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Create Event"
+            android:id="@+id/btn_create"
+            android:layout_below="@+id/ll6"
+            android:onClick="onClick"/>
 
 
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation" />
 
-
-
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
 
 </RelativeLayout>

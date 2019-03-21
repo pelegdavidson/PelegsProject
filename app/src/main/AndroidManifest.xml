@@ -15,16 +15,26 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".LoginActivity">
+            android:name=".SigninActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".MyService" android:process=":my_service" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".DashBoardActivity"
+            android:label="@string/app_name">
+        </activity>
+        <service android:name=".MyService" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permisssion.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+
 
 </manifest>

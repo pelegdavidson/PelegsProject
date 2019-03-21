@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@mipmap/background">
+
+    <Button
+        android:onClick="onClick"
+        android:text="new"
+        android:id="@+id/btn_newevent"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/shapeemail"
+        android:backgroundTint="#13f244"/>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginTop="10dp"
+        android:id="@+id/ll1"
+        android:layout_below="@id/btn_newevent"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:background="@drawable/shapeemail"
+            android:layout_weight="1"
+            android:text="history"
+            android:id="@+id/btn_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="#ff22ff"/>
+
+        <Button
+            android:background="@drawable/shapeemail"
+            android:layout_weight="1"
+            android:text="upcoming"
+            android:id="@+id/btn_upcoming"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#00ffff"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:background="@drawable/shapeemail"
+            android:layout_weight="1"
+            android:text="logout"
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="#f0ff00"/>
+
+        <Button
+            android:background="@drawable/shapeemail"
+            android:layout_weight="1"
+            android:text="change user"
+            android:id="@+id/btn_changeuser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#ff121e"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -8,50 +8,91 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class MyService extends Service implements LocationListener {
-
     boolean isGPSEnable = false;
-    boolean isNetworkEnable = false;
-    double latitude, longitude;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refMyEvents;
+    FirebaseUser currentUser;
+    String[] userEvents;
+    public double latitude, longitude;
     LocationManager locationManager;
-    Location location;
-    public static String str_receiver = "servicetutorial.service.receiver";
-    Intent intent;
+    int i = 0;
+
 
 
     public MyService() {
 
     }
 
-    @Nullable
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        try{
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+             refMyEvents= database.getReference().child("Users").child(currentUser.getUid()).child("MyEvents");
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+            EventsScanner es = new EventsScanner();
+            es.start();
+
+        }catch(SecurityException e){
+
+        }
+
+
+        return START_NOT_STICKY;
+
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+
+        return new MyBinder();
+    }
+
+    public class MyBinder extends Binder {
+        public MyService getService() {
+            return MyService.this;
+        }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        intent = new Intent(str_receiver);
-        fn_getlocation();
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        fn_getlocation();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
     }
 
     @Override
@@ -69,79 +110,78 @@ public class MyService extends Service implements LocationListener {
 
     }
 
-    private void fn_getlocation() {
-        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-        isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNetworkEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if (!isGPSEnable && !isNetworkEnable) {
-
-        } else {
-
-            if (isNetworkEnable) {
-                location = null;
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
-                if (locationManager != null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (location != null) {
-
-                        Log.e("latitude", location.getLatitude() + "");
-                        Log.e("longitude", location.getLongitude() + "");
 
 
-                        fn_update(location);
-                    }
-                }
 
+public class EventsScanner extends Thread{
+    @Override
+    public void run() {
+        listenToMyEvents();
+        while(true){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
-
-            if (isGPSEnable) {
-                location = null;
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-                if (locationManager!=null){
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location!=null){
-                        Log.e("latitude",location.getLatitude()+"");
-                        Log.e("longitude",location.getLongitude()+"");
-
-                        fn_update(location);
-                    }
-                }
-            }
-
-
         }
 
+
+
     }
 
+    private void listenToMyEvents(){
+        refMyEvents.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot:dataSnapshot.getChildren())
+                {
+                    database.getReference().child("Events").child(snapshot.getKey())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    GregorianCalendar currDate = new GregorianCalendar();
+                                    long currdate1 = currDate.getTimeInMillis();
+                                    Event ev = dataSnapshot.getValue(Event.class);
+                                    //Log.i("ffff", ev.getDate());
 
-    private void fn_update(Location location){
+                                    if(ev.date==currdate1){
+                                        Toast.makeText(MyService.this,"the event started "+ev.eventName ,Toast.LENGTH_SHORT).show();
+                                    }
+                                    if(ev.date>=currdate1&&ev.date<(currdate1+ev.duration)){
 
-        intent.putExtra("latitude",location.getLatitude()+"");
-        intent.putExtra("longitude",location.getLongitude()+"");
-        sendBroadcast(intent);
+                                        Location eventLocation = new Location("point A");
+                                        eventLocation.setLatitude(ev.locLatitude);
+                                        eventLocation.setLongitude(ev.locLongitude);
+
+                                        Location myloc = new Location("point B");
+                                        myloc.setLatitude(latitude);
+                                        myloc.setLongitude(longitude);
+
+                                        if(eventLocation.distanceTo(myloc)<30){
+                                            Toast.makeText(MyService.this,"you arrived to the event" ,Toast.LENGTH_SHORT).show();
+                                            database.getReference().child("Events").child(dataSnapshot.getKey()).child("arrivedMembers").child(currentUser.getUid()).setValue("");
+                                            refMyEvents.child(dataSnapshot.getKey()).removeValue();
+                                            database.getReference().child("Users").child(currentUser.getUid()).child("HistoryEvents").child(dataSnapshot.getKey()).setValue("");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MyService.this,"cant get the user's events",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+}
+
 
 
 }
